@@ -217,9 +217,9 @@ def populate_pokeset(pokeset, skip_ev_check=False):
 
     # check gender
     gender = pokeset["gender"]
-    expected_gender = pokeset["species"]["gender"]
+    expected_genders = pokeset["species"]["genders"]
     if gender is None:
-        gender = expected_gender
+        gender = expected_genders.copy()
     if gender == "mf":
         gender = ["m", "f"]
     if not isinstance(gender, list):
@@ -229,8 +229,8 @@ def populate_pokeset(pokeset, skip_ev_check=False):
     for gender_single in gender:
         if gender_single not in ("m", "f", None):
             raise ValueError("gender can only be 'm', 'f' or not set (null), but not %s" % (gender_single,))
-        if not ((expected_gender and gender_single) and (gender_single in expected_gender) or gender_single == expected_gender):
-            raise ValueError(f"Incorrect gender for {pokeset['species']['name']}")
+        if gender_single not in expected_genders:
+            raise ValueError(f"Invalid gender for {pokeset['species']['name']}")
     if len(set(gender)) < len(gender):
         raise ValueError("All genders supplied must be unique: %s" % ", ".join(gender))
     pokeset["gender"] = gender

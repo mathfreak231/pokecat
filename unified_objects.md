@@ -15,7 +15,7 @@ A `Species` object describes a Pokémon species. This object is deliberately not
     "name": "Bulbasaur",          # english name of the species
     "basestats": [Stats object],  # base stats of that species
     "types": [Type objects ...],  # base types of that species, length 1 or 2
-    "gender": [Gender object]     # possible genders of that species
+    "genders": [Gender objects ...] # possible genders of that species
 }
 ```
 
@@ -140,4 +140,4 @@ If indices are needed, use the list above.
 
 ## Gender
 
-A `Gender` is defined as a lowercased string of either `"m"`, `"f"`, or `"mf"` (denoting the Pokémon can be either gender). It can also be `null` (denoting no gender). If `null` is unsupported, instead use the string `"-"`.
+A `Gender` is defined as a single-character string. It can be either `"m"` or `"f"`. The preferred representation for "no gender" is `null`. If that isn't an option, the preferred alternative is `"-"`.
