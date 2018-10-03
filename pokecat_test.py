@@ -256,6 +256,11 @@ class PokecatTester(unittest.TestCase):
         result = pokecat.populate_pokeset(doc)
         self.assertEqual(result["gender"], ["m", "f"])
 
+    def test_default_gender(self):
+        doc = load_test_doc("_template")
+        result = pokecat.populate_pokeset(doc)
+        self.assertEqual(result["gender"], ["m", "f"])
+
     def test_duplicate_gender_list(self):
         doc = load_test_doc("_template")
         doc["gender"] = ["m", "m"]
@@ -268,10 +273,22 @@ class PokecatTester(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, r"gender can only be 'm', 'f' or not set \(null\), but not w"):
             pokecat.populate_pokeset(doc)
 
-    def test_mixed_genders(self):
+    def test_wrong_genders(self):
         doc = load_test_doc("_template")
         doc["gender"] = ["m", None]
-        with self.assertRaisesRegex(ValueError, r"non-gender cannot be mixed with m/f"):
+        with self.assertRaisesRegex(ValueError, r"Invalid gender for Bulbasaur"):
+            pokecat.populate_pokeset(doc)
+        doc["species"] = "Tyrogue"
+        doc["gender"] = "f"
+        with self.assertRaisesRegex(ValueError, r"Invalid gender for Tyrogue"):
+            pokecat.populate_pokeset(doc)
+        doc["species"] = "Chansey"
+        doc["gender"] = ["m", "f"]
+        with self.assertRaisesRegex(ValueError, r"Invalid gender for Chansey"):
+            pokecat.populate_pokeset(doc)
+        doc["species"] = "Beldum"
+        doc["gender"] = ["m"]
+        with self.assertRaisesRegex(ValueError, r"Invalid gender for Beldum"):
             pokecat.populate_pokeset(doc)
 
     def test_level(self):
