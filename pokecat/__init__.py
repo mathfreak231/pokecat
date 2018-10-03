@@ -78,10 +78,10 @@ def populate_pokeset(pokeset, skip_ev_check=False):
     # special cases. I couldn't come up with a structure that wouldn't
     # just feel forced. It could be better, but it could also be worse,
     # and to be honest it's easy enough to maintain (for me at least).
-    
+
     # make deepcopy to not modify original data
     pokeset = deepcopy(pokeset)
-    
+
     # check if there are wrongly capitalized keys
     for key, value in list(pokeset.items()):
         key_lower = key.lower()
@@ -217,6 +217,11 @@ def populate_pokeset(pokeset, skip_ev_check=False):
 
     # check gender
     gender = pokeset["gender"]
+    expected_gender = pokeset["species"]["gender"]
+    if gender is None:
+        gender = expected_gender
+    if gender == "mf":
+        gender = ["m", "f"]
     if not isinstance(gender, list):
         gender = [gender]
     if not gender:
@@ -224,8 +229,8 @@ def populate_pokeset(pokeset, skip_ev_check=False):
     for gender_single in gender:
         if gender_single not in ("m", "f", None):
             raise ValueError("gender can only be 'm', 'f' or not set (null), but not %s" % (gender_single,))
-    if len(gender) > 1 and None in gender:
-        raise ValueError("non-gender cannot be mixed with m/f")
+        if not ((expected_gender and gender_single) and (gender_single in expected_gender) or gender_single == expected_gender):
+            raise ValueError(f"Incorrect gender for {pokeset['species']['name']}")
     if len(set(gender)) < len(gender):
         raise ValueError("All genders supplied must be unique: %s" % ", ".join(gender))
     pokeset["gender"] = gender
@@ -584,7 +589,7 @@ def instantiate_pokeset(pokeset):
         for move in instance["moves"]:
             # extra displayname, might differ due to special cases
             move["displayname"] = move["name"]
-            
+
             # special case: Hidden Power. Fix type, power and displayname
             if move["name"] == "Hidden Power":
                 a, b, c, d, e, f = [ivs[stat] % 2 for stat in ("hp", "atk", "def", "spe", "spA", "spD")]
@@ -727,4 +732,3 @@ def redact_pokeset_data(pokemon):
     pokemon['moves'][0]['power'] = 0
     pokemon['moves'][0]['accuracy'] = 0
     pokemon['tags'] = []
-
