@@ -1,9 +1,9 @@
 
 # Standardized data objects for Twitch Plays Pokémon
 
-This document specifies how various data objects should be structured and named, mainly accross Twitch Plays Pokémon applications. It is not meant to be a complete standard, but rather fulfill the needs of TPP. Therefore the available fields are stripped down to only include the most used fields. Its goal is to standardize those conventions to enable Pokémon data to be submitted cross-application. The structures are defined in commented JSON. If this standard is insufficient for you, try orienting yourself after the names [Smogon](http://www.smogon.com/) or [pokeapi.co](http://pokeapi.co/) uses.
+This document specifies how various data objects should be structured and named, mainly across Twitch Plays Pokémon applications. It is not meant to be a complete standard, but rather fulfill the needs of TPP. Therefore the available fields are stripped down to only include the most used fields. Its goal is to standardize those conventions to enable Pokémon data to be submitted cross-application. The structures are defined in commented JSON. If this standard is insufficient for you, try orienting yourself after the names [Smogon](http://www.smogon.com/) or [pokeapi.co](http://pokeapi.co/) uses.
 
-Which fields are optional and which arent is to be decided by the application utilizing this standard. There also is no localization, everything is in english.
+Which fields are optional and which aren't is to be decided by the application utilizing this standard. There also is no localization, everything is in English.
 
 ## Species
 
@@ -14,7 +14,8 @@ A `Species` object describes a Pokémon species. This object is deliberately not
     "id": 1,                      # National Pokédex number of that Pokémon
     "name": "Bulbasaur",          # english name of the species
     "basestats": [Stats object],  # base stats of that species
-    "types": [Type objects ...]   # base types of that species, length 1 or 2
+    "types": [Type objects ...],  # base types of that species, length 1 or 2
+    "gender": [Gender object]     # possible genders of that species
 }
 ```
 
@@ -103,14 +104,14 @@ Data for `Item` objects may vary between different generations and/or games.
 
 ## Move
 
-Data for `Move` objects may vary between different generations and/or games. 
+Data for `Move` objects may vary between different generations and/or games.
 
 ```
 {
     "id": 1,             # ID of that move, same as game-internal ID
     "name_id": "pound",  # simplyfied string-representation of that move*
     "category": [Category object],  # category of that move. Can be "Physical", "Special" and "Status"
-    "type": [Type object],          # type of that move 
+    "type": [Type object],          # type of that move
     "accuracy": 100,     # base accuracy of that move. between 0 and 100, and can also be null (no accuracy)
     "name": "Pound",     # english name of that move
     "power": 40,         # base power of that move, minimum 0
@@ -139,6 +140,4 @@ If indices are needed, use the list above.
 
 ## Gender
 
-A `Gender` is defined as a single-character string. A gender can either be `"m"` or `"f"`. The preferred representation for "no gender" is `null`. If that isn't an option, the preferred alternative is `"-"`.
-
-
+A `Gender` is defined as a lowercased string of either `"m"`, `"f"`, or `"mf"` (denoting the Pokémon can be either gender). It can also be `null` (denoting no gender). If `null` is unsupported, instead use the string `"-"`.

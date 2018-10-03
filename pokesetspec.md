@@ -5,7 +5,7 @@ This document specifies the format in which Pokémon sets are defined for Twitch
 
 ## Requirements
 
-The format must be easily understandable and usable by people not adept in programming or similar technical tasks. This implies error tolerance against common mistakes such as: 
+The format must be easily understandable and usable by people not adept in programming or similar technical tasks. This implies error tolerance against common mistakes such as:
 - additional whitespace
 - spelling errors
 - wrong case-sensitivity
@@ -82,11 +82,11 @@ All Pokémon, items and abilities must be from 4th generation or earlier, becaus
 
 **nature**
   : The Pokémon's nature. Can either be a nature name, a nature number (0 = Hardy, 24 = Quirky) or a nature defined by boosted and nerfed stat (for example `+atk -spD`)
-  
+
 **ivs**
   : The Pokémon's Individual Values. Can either be a single number (e.g. `0`) to be the same for all stats, or a dictionary containing a value for each stat (`hp`, `atk`, `def`, `spe`, `spA` and `spD`).
   : *Note:* An inline dictionary consists of comma-separated `key:value` pairs enclosed in curly braces, like in the example.
-  
+
 **evs**
   : Same as *IVs*, but for Effort Values. The sum of all values cannot exceed 510, and one single stat cannot have more than 252 EVs.
 
@@ -102,8 +102,7 @@ All Pokémon, items and abilities must be from 4th generation or earlier, becaus
   : Name the Pokémon has ingame. Defaults to the Species' name in uppercase. Maximum of 10 characters, therefore the default might have a shortened species name (e.g. `CRABOMINAB` for Crabominable). Can only contain ASCII characters and the male/female sign.  Note the ingamename might be altered automatically when used in a match (e.g. appending numbers to make it unique, if there is a technical limitation that Pokémon with the same ingame name cannot be in the same match).
 
 **gender**
-  : Defaults to null (no gender). Can also be "m" and "f", or a *list of genders* (e.g. `[m, f]`) to let RNG decide.
-  : *Note:* Mixing male and female with no gender in the same species can crash PBR. For each species (therefore also across all set for that species) agree on sticking to whether that species is genderless or not.
+  : Defaults to all possible genders of the species. Can be `null`, `m`, `f` for sets that should only be one gender, or `[m, f]` to let RNG decide. `mf` is automatically expanded to `[m, f]`.
 
 **form**
   : Defaults to `0`. Can be a form number, or a form name specific to a given Pokémon. The following form names are valid:  
@@ -131,7 +130,7 @@ All Pokémon, items and abilities must be from 4th generation or earlier, becaus
   : Defaults to `true`, except for Pokémon with `shiny` set to `true`, where it defaults to `false`. If `false`, the Pokémon is not available for token match bidding.
 
 **hidden**
-  : Defaults to `false`, except for Pokémon with `shiny` set to `true`, where it defaults to `true`. If `true`, the Pokémon will be treated as non-existent, conceiling its existence. Can be used to not spoil Shinies for example.
+  : Defaults to `false`, except for Pokémon with `shiny` set to `true`, where it defaults to `true`. If `true`, the Pokémon will be treated as non-existent, concealing its existence. Can be used to not spoil Shinies for example.
 
 **rarity**
   : Defaults to `1.0`. Multiplier for the chance this set gets chosen by RNG, relative to other sets of the same species. Values smaller than `1.0` cause this set to be selected less often. Values greater than `1.0` cause this set to be selected more often. For example `2.0` doubles this set's chance to get picked.
@@ -165,7 +164,7 @@ All Pokémon, items and abilities must be from 4th generation or earlier, becaus
   - `setname+Standard` if the pokeset's setname is Standard. `Standard` can be any setname respectively.
     The name will be normalized, which usually means lowercase with spaces replaced by `-` and other special characters removed.
   - `matchmaker-enabled` if the rarity is above 0.
-  - `ability+Levitate` if the pokeset's ability has the levitate ability as an option. `Levitate` can be any ability respectively. If multiple abilities are avalible, the resulting mon(s) may not have the ability on the tag you filtered by.
+  - `ability+Levitate` if the pokeset's ability has the levitate ability as an option. `Levitate` can be any ability respectively. If multiple abilities are available, the resulting mon(s) may not have the ability on the tag you filtered by.
 
 **suppressions**
   : A list of suppressions. These can be used to suppress certain warnings pokecat emits.
@@ -173,7 +172,7 @@ All Pokémon, items and abilities must be from 4th generation or earlier, becaus
   - `invalid-evs` suppresses warnings for too many EVs. This affects sets with over 510 EVs total,
     or more than 252 for one stat.
   - `wasted-evs` suppresses warnings for EVs that are not a multiple of 4.
-  - `duplicate-moves` suppresses warnings for the same move occuring in multiple move slots.
-    This is a warning in the first place because PBR only ever deducts and checks PP from the topmost occurance of a move.
-    If the topmost occurance has no PP left, the other slots can still be selected, but the move will fail.
+  - `duplicate-moves` suppresses warnings for the same move occurring in multiple move slots.
+    This is a warning in the first place because PBR only ever deducts and checks PP from the topmost occurrence of a move.
+    If the topmost occurrence has no PP left, the other slots can still be selected, but the move will fail.
   - `public-shiny` suppresses warnings about a shiny set being biddable and/or visible (not hidden).
